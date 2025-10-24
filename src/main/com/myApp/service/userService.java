@@ -37,4 +37,27 @@ public class userService implements userDao {
         }
         return user;
     }
+
+
+    public Boolean Register(User user)
+    {
+        Connection con  = this.connection.getConnection();
+        String sql = "INSERT INTO user (first_name, last_name, email , password) VALUES (?, ?, ?,?)";
+
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3,user.getEmail());
+
+            ps.setString(5,user.getPassword());
+
+            int rows = ps.executeUpdate();
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
