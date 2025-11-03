@@ -5,7 +5,14 @@ import lombok.NoArgsConstructor;
 import model.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import util.studentUtil;
+//import org.hibernate.query.Query;
+
+import javax.persistence.Query;
+import java.util.Date;
+import java.util.List;
 
 
 public class Main {
@@ -19,23 +26,42 @@ public class Main {
         Session session = sessionFactory.getCurrentSession();
 
         session.beginTransaction();
-        /*Student student = new Student();
-        student.setFirst_name("salma");
-        student.setLast_name("shehata");
-        session.save(student);*/
+    //    Transaction transaction = null;
+        /* HQL get all queries */
+       /* Query query = session.createQuery("from Student");
+        List<Student> students = query.getResultList();
 
-        Student student = session.get(Student.class , 2);
+        for (Student student : students) {
+            System.out.println(student.toString());
+        }*/
 
+        // hql update row
+
+      /*  Query query = session.createQuery("update Student set first_name=:name where id=:id" );
+        query.setParameter("name", "salooma");
+        query.setParameter("id", 1);
+        query.executeUpdate();
+        query = session.createQuery("from Student where id=:id");
+        query.setParameter("id", 1);
+        Student student = (Student) query.getSingleResult();
+
+
+        session.getTransaction().commit();*/
+
+        // create student with data column
+
+       /* Date date = new Date();  // using all arg constructor
+        studentUtil studentUtil = new studentUtil();
+        Student student = new Student(5, "salma", "emam", date, studentUtil);
+        System.out.println(student.toString());*/
+
+        // create  Student using builder
+
+        Student student = Student.builder()
+                        .first_name("salma").last_name("emam").join_date(new Date()).build();
         System.out.println(student.toString());
-
-        student.setLast_name("emam");
-
-        session.update(student);
-        Student studentUpdated = session.get(Student.class , 2);
-
-        System.out.println(studentUpdated.toString());
-        session.delete(student)
+        session.save(student);
         session.getTransaction().commit();
-
+        System.out.println(student.toString());
     }
 }
